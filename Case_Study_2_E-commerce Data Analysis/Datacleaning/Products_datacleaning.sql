@@ -66,12 +66,4 @@ SET Brand =
     WHEN product_name LIKE "%apple%" THEN "apple"
   END
 WHERE TRIM(COALESCE(brand, '')) = '';
-
-/* stock_quantity and release_year won’t contribute meaningfully in current 
-analysis (e.g., product trends, sales insights, etc.),
- i'll drop them and keep the dataset clean*/
- 
-ALTER TABLE Products 
-DROP COLUMN stock_quantity,
-DROP COLUMN release_year;
 delete from products where TRIM(COALESCE(product_name, '')) = '';
