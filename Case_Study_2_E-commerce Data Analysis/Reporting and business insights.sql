@@ -5,6 +5,7 @@ segments based on their total purchase volume or frequency
  (e.g., high-value customers, repeat buyers, one-time buyers).
  
 */
+
 With customerCTE as (select customer_id, count(customer_id) as frequence_buyers from orders group by customer_id)
  select customer_id,frequence_buyers,
  CASE 
@@ -20,3 +21,14 @@ With customerCTE as (select customer_id, count(customer_id) as frequence_buyers 
 customers who made their last purchase more than 6 months ago 
 and haven't returned since.
 */
+WITH ChurnRateCTE AS (
+  SELECT 
+    customer_id,
+    MAX(order_date) AS last_order_date
+  FROM orders
+  GROUP BY customer_id
+)
+SELECT 
+  (COUNT(CASE WHEN last_order_date <= DATE_SUB(CURRENT_DATE, INTERVAL 6 MONTH) THEN 1 END) / 
+   COUNT(DISTINCT customer_id)) * 100 AS churn_rate
+FROM ChurnRateCTE;
